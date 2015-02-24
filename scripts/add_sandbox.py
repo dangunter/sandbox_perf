@@ -10,7 +10,7 @@ import json
 import sys
 import time
 
-from .common import ConnectionError, MongoClient
+from sbxperf.common import ConnectionError, MongoClient
 
 # sbxd: [{id: 'jcesr', e_above_hull: 1}, {id: 'mp', e_above_hull: 1.1}]
 # db.materials.ensureIndex({'sbxd.id': 1, 'sbxd.e_above_hull': 1, ...})

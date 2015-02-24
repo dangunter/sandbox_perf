@@ -14,7 +14,7 @@ import time
 
 import pymongo
 
-from .common import ConnectionError, MongoClient
+from sbxperf.common import ConnectionError, MongoClient
 
 def do_queries(infile, client):
     start_time = time.time()
