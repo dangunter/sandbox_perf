@@ -22,8 +22,11 @@ def do_queries(infile, client):
     for line in infile:
         spec = json.loads(line.strip())
         qt0 = time.time()
-        _ = client.collection.find(spec, fields={'_id': 1})
-        n = _.count()
+        cursor = client.collection.find(spec, fields={'_id': 1})
+        sys.stderr.write("-----------------------------------------------\n")
+        sys.stderr.write("Query: {}\n".format(spec))
+        sys.stderr.write("Plan: {}\n".format(json.dumps(cursor.explain(), indent=2)))
+        n = cursor.count()
         qt = time.time() - qt0
         sys.stderr.write(".")
         sys.stderr.flush()

@@ -44,13 +44,7 @@ def add(client, name, pct, num_sbx):
     for record in cursor:
         examined += 1
         r = random.random()
-        if r > prob:
-            # do not add to this record
-            if SBX_KEY not in record:
-                # add empty sandbox section
-                update(record['_id'], [])
-                inserted += 1  # but, don't count towards total
-        else:
+        if r <= prob:
             # add to this record
             sbxd = record.get(SBX_KEY, [])
             for i in range(num_sbx):
@@ -58,23 +52,35 @@ def add(client, name, pct, num_sbx):
                 sbxd.append({SBX_ID: name_i, 'e_above_hull': r + 0.01 * i})
             update(record['_id'], sbxd)
             inserted += 1
-            changed += 1
-        if inserted % 100 == 0:
+            if num_sbx > 0:
+                changed += 1
+        else:
+            # check/fix for no sandbox section
+            if SBX_KEY not in record:
+                update(record['_id'], [])
+        if (examined % 100) == 0:
             progress(inserted, examined, count)
 
     progress(inserted, examined, count, final=True)
 
     return changed
 
+def add_indexes(client):
+    sys.stderr.write("adding indexes..")
+    sys.stderr.flush()
+    client.collection.ensure_index(SBX_KEY + '.' + SBX_ID)
+    client.collection.ensure_index(SBX_KEY + '.' + 'e_above_hull')
+    sys.stderr.write("done\n")
+
 def progress(n, n2, total, final=False):
     term = '\n' if final else '        \r'
-    msg = "inserted {:d} records ({:d} examined) / {:d} total"\
+    msg = "inserted {:d} records ({:d} / {:d})    "\
         .format(n, n2, total)
     sys.stderr.write(msg + term)
     sys.stderr.flush()
 
 def clear(client):
-    client.collection.update({}, {'$set': {SBX_KEY: []}})
+    client.collection.update({}, {'$unset': {SBX_KEY: ""}}, multi=True)
 
 def main():
     global show_warnings
@@ -104,7 +110,7 @@ def main():
         clear(client)
     else:
         add(client, args.name, args.pct, args.num)
-
+        add_indexes(client)
 
 if __name__ == '__main__':
     sys.exit(main())

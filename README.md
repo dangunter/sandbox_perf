@@ -36,4 +36,23 @@ your PATH.
 can be re-executed.
 * run_queries.py - Run queries (from extract_queries.py) on the target collection.
 
+## Experiments
 
+Using configuration file `local.conf` to connect to a MongoDB running on
+my laptop:
+
+    {"host": "localhost",
+    "port": 27017,
+    "database": "mg_core_dev",
+    "collection": "materials"
+    }
+
+Run these commands:
+
+    # clear out old sandboxes
+    add_sandbox.py _ local.conf  --clear
+    # add 5 'dang' sandboxes to 1% of the records
+    # also adds empty sandbox sections to every record
+    add_sandbox.py dang local.conf -n 5 -p 1
+    # run queries
+    run_queries.py 

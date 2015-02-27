@@ -1,0 +1,4 @@
+{"sbxd": {"$elemMatch": {"id": "s_1", "e_above_hull":{"$gt": 0}}}}
+{"task_id":{"$in":["mp-3777"]},"sbxd": {"$elemMatch": {"id": "s_1", "e_above_hull":{"$gt": 0}}}}
+{"sbxd": {"$elemMatch": {"id": "z_1", "e_above_hull":{"$gt": 0}}}}
+{"task_id":{"$in":["mp-3777"]},"sbxd": {"$elemMatch": {"id": "z_1", "e_above_hull":{"$gt": 0}}}}

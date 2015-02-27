@@ -1,0 +1,2 @@
+{"analysis.e_above_hull":{"$gt": 0}}
+{"task_id":{"$in":["mp-3777"]},"analysis.e_above_hull":{"$gt": 0}}
